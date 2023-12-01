@@ -16,5 +16,6 @@
       <Button fx:id="btnVoltar" layoutX="80.0" layoutY="40.0" mnemonicParsing="false" onAction="#voltarHome" text="Voltar" />
       <ListView fx:id="especiesListView" layoutX="80.0" layoutY="154.0" prefHeight="200.0" prefWidth="458.0" />
       <Button fx:id="btnAtualizar" layoutX="475.0" layoutY="40.0" mnemonicParsing="false" onAction="#atualizar" text="Atualizar" />
+      <Button fx:id="btnDeletar" layoutX="409.0" layoutY="40.0" mnemonicParsing="false" onAction="#deletarEspecie" text="Deletar" />
    </children>
 </AnchorPane>

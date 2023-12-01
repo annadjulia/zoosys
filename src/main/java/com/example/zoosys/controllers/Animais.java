@@ -56,8 +56,25 @@ public class Animais {
             String dataEntrada = resultado.getString("dataEntrada");
             String alimentacao = resultado.getString("alimentacao");
             String id = resultado.getString("id");
-            String coisa = String.format("ID: %s\t\tNome: %s\t\tEspecie: %s\t\tSexo: %s\t\tData de Nascimento: %s\t\tData de Entrada: %s\t\tAlimentação: %s", nome, especie, sexo, dataNascimento, dataEntrada, alimentacao, id);
+            String coisa = String.format("ID: %s\t\tNome: %s\t\tEspecie: %s\t\tSexo: %s\t\tData de Nascimento: %s\t\tData de Entrada: %s\t\tAlimentação: %s", id, nome, especie, sexo, dataNascimento, dataEntrada, alimentacao);
             animaisListView.getItems().add(coisa);
+        }
+    }
+
+    @FXML
+    private void deletarAnimal() throws SQLException {
+        int selectedIndex = animaisListView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            System.out.println(animaisListView.getItems().get(selectedIndex));
+            String idAnimal = animaisListView.getItems().get(selectedIndex).split("\t")[0].substring(4);
+            String sql = "DELETE FROM animais WHERE id = ?";
+            PreparedStatement requisicao = Db.conectar().prepareStatement(sql);
+            requisicao.setString(1, idAnimal);
+            requisicao.execute();
+            animaisListView.getItems().remove(selectedIndex);
+            System.out.println("Animal removido com sucesso!");
+        } else {
+            System.out.println("Nenhum animal selecionado para deletar.");
         }
     }
 

@@ -60,6 +60,23 @@ public class Funcionarios {
     }
 
     @FXML
+    private void deletarFunc() throws SQLException {
+        int selectedIndex = funcionariosListView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            System.out.println(funcionariosListView.getItems().get(selectedIndex));
+            String idFunc = funcionariosListView.getItems().get(selectedIndex).split("\t")[0].substring(4);
+            String sql = "DELETE FROM funcionarios WHERE id = ?";
+            PreparedStatement requisicao = Db.conectar().prepareStatement(sql);
+            requisicao.setString(1, idFunc);
+            requisicao.execute();
+            funcionariosListView.getItems().remove(selectedIndex);
+            System.out.println("Funcionário removido com sucesso!");
+        } else {
+            System.out.println("Nenhum funcionário selecionado para deletar.");
+        }
+    }
+
+    @FXML
     private void voltarHome(){
         System.out.println("Voltando para home");
         try {

@@ -56,6 +56,23 @@ public class Especies {
     }
 
     @FXML
+    private void deletarEspecie() throws SQLException {
+        int selectedIndex = especiesListView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            System.out.println(especiesListView.getItems().get(selectedIndex));
+            String idEspecie = especiesListView.getItems().get(selectedIndex).split("\t")[0].substring(4);
+            String sql = "DELETE FROM especies WHERE id = ?";
+            PreparedStatement requisicao = Db.conectar().prepareStatement(sql);
+            requisicao.setString(1, idEspecie);
+            requisicao.execute();
+            especiesListView.getItems().remove(selectedIndex);
+            System.out.println("Espécie removida com sucesso!");
+        } else {
+            System.out.println("Nenhuma espécie selecionada para deletar.");
+        }
+    }
+
+    @FXML
     private void voltarHome(){
         System.out.println("Voltando para home");
         try {
