@@ -1,31 +1,24 @@
 package com.example.zoosys.models;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Funcionario {
     private int id;
     private String nome;
-    private int cpf;
+    private String cpf;
     private String dataNascimento;
-    private String dataAdmissao;
     private String telefone;
     private String email;
     private String cargo;
+    private Connection con;
 
-    public Funcionario(int id, String nome, int cpf, String dataNascimento, String dataAdmissao, String telefone, String email, String cargo) {
-        this.id = id;
+    public Funcionario(String nome, String cpf, String dataNascimento, String telefone, String email, String cargo) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
-        this.dataAdmissao = dataAdmissao;
-        this.telefone = telefone;
-        this.email = email;
-        this.cargo = cargo;
-    }
-
-    public Funcionario(String nome, int cpf, String dataNascimento, String dataAdmissao, String telefone, String email, String cargo) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
-        this.dataAdmissao = dataAdmissao;
         this.telefone = telefone;
         this.email = email;
         this.cargo = cargo;
@@ -33,6 +26,56 @@ public class Funcionario {
 
     public Funcionario() {
 
+    }
+
+    public Funcionario(Connection con) {
+        this.con = con;
+    }
+
+    public ResultSet listarFuncionarios() throws SQLException {
+        System.out.println("Listar Funcionarios");
+        String sql = "SELECT * FROM funcionarios";
+        PreparedStatement requisicao = con.prepareStatement(sql);
+        ResultSet resultado = requisicao.executeQuery();
+        return resultado;
+    }
+
+    public boolean salvarFuncionario(String nome, String cpf, String dataNascimento, String telefone, String email, String cargo) throws SQLException, SQLException {
+        System.out.println("Salvar Funcionario");
+        String sql = "INSERT INTO funcionarios (nome, cpf, dataNascimento, telefone, email, cargo) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement requisicao = con.prepareStatement(sql);
+        requisicao.setString(1, nome);
+        requisicao.setString(2, cpf);
+        requisicao.setString(3, dataNascimento);
+        requisicao.setString(4, telefone);
+        requisicao.setString(5, email);
+        requisicao.setString(6, cargo);
+        requisicao.executeUpdate();
+        return true;
+    }
+
+    public boolean editarFuncionario(String nome, String cpf, String dataNascimento, String telefone, String email, String cargo) throws SQLException {
+        System.out.println("Editar Funcionario");
+        String sql = "UPDATE funcionarios SET nome = ?, cpf = ?, dataNascimento = ?, telefone = ?, email = ?, cargo = ? WHERE id = ?";
+        PreparedStatement requisicao = con.prepareStatement(sql);
+        requisicao.setString(1, nome);
+        requisicao.setString(2, cpf);
+        requisicao.setString(3, dataNascimento);
+        requisicao.setString(4, telefone);
+        requisicao.setString(5, email);
+        requisicao.setString(6, cargo);
+        requisicao.setInt(7, id);
+        requisicao.executeUpdate();
+        return true;
+    }
+
+    public boolean excluirFuncionario() throws SQLException {
+        System.out.println("Excluir Funcionario");
+        String sql = "DELETE FROM funcionarios WHERE id = ?";
+        PreparedStatement requisicao = con.prepareStatement(sql);
+        requisicao.setInt(1, id);
+        requisicao.executeUpdate();
+        return true;
     }
 
     public int getId() {
@@ -51,11 +94,11 @@ public class Funcionario {
         this.nome = nome;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
@@ -65,14 +108,6 @@ public class Funcionario {
 
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
-    }
-
-    public String getDataAdmissao() {
-        return dataAdmissao;
-    }
-
-    public void setDataAdmissao(String dataAdmissao) {
-        this.dataAdmissao = dataAdmissao;
     }
 
     public String getTelefone() {

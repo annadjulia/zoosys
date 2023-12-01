@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +19,9 @@ public class Login {
     @FXML
     private TextField senha;
 
+    @FXML
+    private AnchorPane homePane;
+
     public void entrar(ActionEvent actionEvent) {
         System.out.println("Usuario: " + usuario.getText());
         System.out.println("Senha: " + senha.getText());
@@ -27,7 +31,7 @@ public class Login {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("home.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
-                Stage stage = new Stage();
+                Stage stage = (Stage) homePane.getScene().getWindow();
                 stage.setTitle("Home");
                 stage.setScene(scene);
                 stage.show();

@@ -1,5 +1,10 @@
 package com.example.zoosys.models;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Animal {
     private int id;
     private String nome;
@@ -8,16 +13,7 @@ public class Animal {
     private String dataNascimento;
     private String dataEntrada;
     private String alimentacao;
-
-    public Animal(int id, String nome, String especie, String sexo, String dataNascimento, String dataEntrada, String alimentacao) {
-        this.id = id;
-        this.nome = nome;
-        this.especie = especie;
-        this.sexo = sexo;
-        this.dataNascimento = dataNascimento;
-        this.dataEntrada = dataEntrada;
-        this.alimentacao = alimentacao;
-    }
+    private Connection con;
 
     public Animal(String nome, String especie, String sexo, String dataNascimento, String dataEntrada, String alimentacao) {
         this.nome = nome;
@@ -30,6 +26,48 @@ public class Animal {
 
     public Animal() {
 
+    }
+
+    public Animal(Connection con) {
+        this.con = con;
+    }
+
+    public boolean salvarAnimal(String nome, String especie, String sexo, String dataNascimento, String dataEntrada, String alimentacao) throws SQLException {
+        System.out.println("Salvar Animal");
+        String sql = "INSERT INTO animais (nome, especie, sexo, dataNascimento, dataEntrada, alimentacao) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement requisicao = con.prepareStatement(sql);
+        requisicao.setString(1, nome);
+        requisicao.setString(2, especie);
+        requisicao.setString(3, sexo);
+        requisicao.setString(4, dataNascimento);
+        requisicao.setString(5, dataEntrada);
+        requisicao.setString(6, alimentacao);
+        requisicao.executeUpdate();
+        return true;
+    }
+
+    public boolean editarAnimal(String nome, String especie, String sexo, String dataNascimento, String dataEntrada, String alimentacao) throws SQLException {
+        System.out.println("Editar Animal");
+        String sql = "UPDATE animais SET nome = ?, especie = ?, sexo = ?, dataNascimento = ?, dataEntrada = ?, alimentacao = ? WHERE id = ?";
+        PreparedStatement requisicao = con.prepareStatement(sql);
+        requisicao.setString(1, nome);
+        requisicao.setString(2, especie);
+        requisicao.setString(3, sexo);
+        requisicao.setString(4, dataNascimento);
+        requisicao.setString(5, dataEntrada);
+        requisicao.setString(6, alimentacao);
+        requisicao.setInt(7, id);
+        requisicao.executeUpdate();
+        return true;
+    }
+
+    public boolean excluirAnimal() throws SQLException {
+        System.out.println("Excluir Animal");
+        String sql = "DELETE FROM animais WHERE id = ?";
+        PreparedStatement requisicao = con.prepareStatement(sql);
+        requisicao.setInt(1, id);
+        requisicao.executeUpdate();
+        return true;
     }
 
     public int getId() {
